@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API = "https://surfaces-contribution-packard-dist.trycloudflare.com";
+const API = "https://professional-grove-speak-skiing.trycloudflare.com";
 const KEY = "changeme123";
 
 export default function App() {
@@ -114,7 +114,7 @@ function previewImage(i) {
   if(["png","jpg","jpeg","webp","gif","cr2"].includes(ext)) 
     return <img src={`${API}/files/${path?path+"/":""}${i.name}?key=${KEY}`}
       style={{width:22,height:22,objectFit:"cover",borderRadius:4}}/>;
-  return "📄";
+  return "";
 }
 
 
@@ -123,52 +123,49 @@ function previewImage(i) {
 
       <h2 style={{display:"flex", alignItems:"center", gap:"10px"}}>📁 <BreadCrumbs/></h2>
       <div
-        onDrop={async (e)=>{
-          e.preventDefault();
-          setUploading(true);
+        onDrop={async (e) => {
+  e.preventDefault();
+  setUploading(true);
 
-          async function handleItem(item, currentPath="") {
-            if (item.kind !== "file") return;
+  async function uploadEntry(entry, currentPath="") {
+    return new Promise(async (resolve) => {
+      if (entry.isFile) {
+        entry.file(async (file) => {
+          await upload(file, p => setProgress(p), currentPath);
+          resolve();
+        });
+      }
 
-            const entry = item.webkitGetAsEntry();
-            if (!entry) return;
+      else if (entry.isDirectory) {
+        const folderPath = currentPath ? `${currentPath}/${entry.name}` : entry.name;
+        await axios.post(`${API}/mkdir?name=${entry.name}&path=${currentPath}&key=${KEY}`);
 
-            // FOLDER
-            if (entry.isDirectory) {
-              await axios.post(`${API}/mkdir?name=${entry.name}&path=${path}/${currentPath}&key=${KEY}`);
-              
-              const reader = entry.createReader();
-              const readEntries = () =>
-                new Promise(resolve => reader.readEntries(resolve));
+        const reader = entry.createReader();
+        function readBatch() {
+          reader.readEntries(async (entries) => {
+            if (!entries.length) return resolve();
 
-              let entries;
-              while(entries = await readEntries(), entries.length){
-                for(const ent of entries){
-                  await handleItem(
-                    {kind:"file", webkitGetAsEntry:()=>ent}, 
-                    currentPath ? `${currentPath}/${entry.name}` : entry.name
-                  );
-                }
-              }
+            for (const ent of entries) {
+              await uploadEntry(ent, folderPath);
             }
+            readBatch();
+          });
+        }
+        readBatch();
+      }
+    });
+  }
 
-            // FILE
-            else if (entry.isFile) {
-              entry.file(async file=>{
-                await upload(file, p=>setProgress(p), currentPath);
-              });
-            }
-          }
+  const items = e.dataTransfer.items;
+  for (const item of items) {
+    const entry = item.webkitGetAsEntry && item.webkitGetAsEntry();
+    if (entry) await uploadEntry(entry);
+  }
 
-          const items = e.dataTransfer.items;
-          for(const item of items){
-            await handleItem(item);
-          }
-
-          setUploading(false);
-          setProgress(0);
-          load(path);
-        }}
+  setUploading(false);
+  setProgress(0);
+  load(path);
+}}
 
         onDragOver={(e)=>e.preventDefault()}
         style={{
