@@ -1,6 +1,6 @@
 # 🚀 Secure Cloud Storage Server + Web UI + Flutter Mobile Client
 
-A self-hosted personal cloud system built using **FastAPI** and **React UI**. This system allows you to upload, download, preview files, stream videos, and manage folders remotely.
+A self-hosted personal cloud system built using **FastAPI** and React UI. This system allows you to upload, download, preview files, stream videos, and manage folders remotely.
 
 > 💡 **Concept:** Works like a mini Google Drive that you control yourself. Ideal for private home-server usage.
 
@@ -14,7 +14,7 @@ A self-hosted personal cloud system built using **FastAPI** and **React UI**. Th
 * **📤 Uploads:** Support for Camera, Gallery, and File Picker (Multi-upload supported).
 * **📥 Downloads:** Saves files directly to the device's actual Downloads folder.
 * **📂 Management:** Create folders and delete files.
-* **⚡ Network:** Optimized for Global access.
+* **⚡ Network:** Optimized for Global usage.
 
 ## 🏗 Tech Stack
 
@@ -24,7 +24,7 @@ A self-hosted personal cloud system built using **FastAPI** and **React UI**. Th
 | **Mobile Client** | Flutter |
 | **Storage** | Local filesystem |
 | **Streaming** | FastAPI chunked video |
-| **Network** | Cloudflare tunnel |
+| **Network** | Cloudflare Tunnel |
 
 
 ## 🔧 Server Setup (Backend)
@@ -49,40 +49,6 @@ A self-hosted personal cloud system built using **FastAPI** and **React UI**. Th
     uvicorn server:app --host 0.0.0.0 --port 8000
     ```
 
-## 📱 Flutter App Setup (Mobile Client)
-
-1.  Navigate to the app directory:
-    ```bash
-    cd mobile_client/remote_file_client
-    flutter pub get
-    ```
-
-2.  **Configuration:**
-    Open `lib/main.dart` and update the connection details:
-    ```dart
-    // Use your Tailscale IP here (starts with 100.x.x.x)
-    final String baseUrl = "http://YOUR_TAILSCALE_IP:8000"; 
-    
-    // Must match the key in server.py
-    final String apiKey  = "changeme123"; 
-    ```
-
-3.  **Android Manifest Config:**
-    To allow video streaming over HTTP, you must allow cleartext traffic.
-    Open `android/app/src/main/AndroidManifest.xml` and add the `usesCleartextTraffic` line:
-    ```xml
-    <application
-        android:label="Remote File Client"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"> ...
-    </application>
-    ```
-
-4.  Run the app:
-    ```bash
-    flutter run
-    ```
 ## 🌐 Web Client Setup (Optional Web UI)
 
 > The Web Client lets you access files from any browser, similar to a lightweight cloud drive interface.
