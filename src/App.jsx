@@ -183,7 +183,7 @@ function previewImage(i) {
       >
         {uploading 
           ? `Uploading... ${progress}%` 
-          : "📤 Drag & Drop files here to upload"}
+          : "Drag & Drop files here"}
       </div>
 
       <div style={{display:"flex", gap:"10px", marginBottom:"15px"}}>
@@ -209,11 +209,11 @@ function previewImage(i) {
           {selected.length === items.length ? "Unselect All" : "Select All"}
         </button>
 
-        <button onClick={()=>load(path)} style={btnStyle}>🔄 Refresh</button>
+        <button onClick={()=>load(path)} style={btnStyle}>Refresh</button>
         <button onClick={()=>{
           const name = prompt("Folder name:");
           if(name) axios.post(`${API}/mkdir?name=${name}&path=${path}&key=${KEY}`).then(()=>load(path))
-        }} style={btnStyle}>📁 New Folder</button>
+        }} style={btnStyle}>New Folder</button>
         <button
           disabled={selected.length===0}
           onClick={async ()=>{
@@ -231,7 +231,7 @@ function previewImage(i) {
             color:"white",
             cursor:selected.length?"pointer":"not-allowed"
           }}
-        >🗑 Delete Selected</button>
+        >Delete Selected</button>
         <button
           disabled={selected.length === 0}
           onClick={async ()=>{
@@ -257,11 +257,14 @@ function previewImage(i) {
             cursor:selected.length?"pointer":"not-allowed"
           }}
         >
-        ✏️ Batch Rename
+        Batch Rename
         </button>
 
       </div>
-
+            {path && <button onClick={()=>{
+        const parts = path.split("/").slice(0,-1);
+        load(parts.join("/"));
+      }}>⬅ Back</button>}
       <ul style={{listStyle:"none", paddingLeft:0}}>
         {items.filter(i => !i.name.startsWith("._"))
         .map(i => (
@@ -291,7 +294,7 @@ function previewImage(i) {
                 onClick={(e)=>e.stopPropagation()}   // extra safety
               />
 
-              {i.is_dir ? "📂" : previewImage(i)}
+              {i.is_dir ? "" : previewImage(i)}
               {i.name}
             </span>
 
@@ -317,10 +320,7 @@ function previewImage(i) {
         ))}
       </ul>
 
-      {path && <button onClick={()=>{
-        const parts = path.split("/").slice(0,-1);
-        load(parts.join("/"));
-      }}>⬅ Back</button>}
+    
 
       {/* IMAGE PREVIEW MODAL INSIDE RETURN */}
       {preview && (
