@@ -1,10 +1,63 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  --bg: #111111;
+  --text: #eaeaea;
+  --card: #1c1f23;
+  --border: #2a2e33;
+  color-scheme: dark;
+}
+html{
+  background-color: #444;
+}
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+button {
+  background-color: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+}
+
+input,
+select,
+textarea {
+  background-color: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+}
+
+input[type="file"] {
+  color: var(--text);
+}
+
+a {
+  color: #8b9cff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+#root {
+  max-width: none;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -37,6 +90,3 @@
   padding: 2em;
 }
 
-.read-the-docs {
-  color: #888;
-}

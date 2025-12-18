@@ -119,9 +119,10 @@ function previewImage(i) {
 
 
   return (
-    <div style={{ padding: 20, fontFamily: "monospace" }}>
+    <div style={{ background: "#111111", color: "#eaeaea", minHeight: "100vh", colorScheme: "dark" }}>
+      <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "24px 32px", fontFamily: "monospace" }}>
 
-      <h2 style={{display:"flex", alignItems:"center", gap:"10px"}}>📁 <BreadCrumbs/></h2>
+      <h2 style={{display:"flex", alignItems:"center", gap:"10px"}}><BreadCrumbs/></h2>
       <div
         onDrop={async (e) => {
   e.preventDefault();
@@ -185,8 +186,9 @@ function previewImage(i) {
 
       <div style={{display:"flex", gap:"10px", marginBottom:"15px"}}>
         <input 
-          type="file" 
-          multiple 
+          type="file"
+          multiple
+          style={{ color: "#eaeaea" }}
           onChange={async (e)=>{
             setUploading(true);
             for(let f of e.target.files){
@@ -258,21 +260,21 @@ function previewImage(i) {
         </button>
 
       </div>
-            {path && <button onClick={()=>{
+            {path && <button style={btnStyle} onClick={()=>{
         const parts = path.split("/").slice(0,-1);
         load(parts.join("/"));
-      }}>⬅ Back</button>}
+      }}>Back</button>}
       <ul style={{listStyle:"none", paddingLeft:0}}>
         {items.filter(i => !i.name.startsWith("._"))
         .map(i => (
           <li key={i.name}
             style={{
               display:"grid",
-              gridTemplateColumns:"1fr 120px 200px 90px", // NAME | SIZE | DATE | ACTIONS
+              gridTemplateColumns:"2fr 140px 220px 140px", // NAME | SIZE | DATE | ACTIONS
               alignItems:"center",
               background:"#1c1f23",
               margin:"6px 0",
-              padding:"10px 14px",
+              padding:"14px 18px",
               borderRadius:"8px",
               transition:"0.15s",
               cursor:"pointer"
@@ -306,10 +308,9 @@ function previewImage(i) {
             </span>
 
             {/* ACTION BUTTONS */}
-            <div style={{display:"flex",gap:"6px",justifyContent:"flex-end"}}>
-              <button onClick={(e)=>{e.stopPropagation(); renameItem(i.name)}}>✎</button>
-              <button onClick={(e)=>{e.stopPropagation(); remove(i.name)}}>🗑</button>
-
+            <div style={{display:"flex",gap:"10px",justifyContent:"flex-end"}}>
+              <button onClick={(e)=>{e.stopPropagation(); renameItem(i.name)}}>Rename</button>
+              <button onClick={(e)=>{e.stopPropagation(); remove(i.name)}}>Delete</button>
             </div>
 
           </li>
@@ -347,7 +348,7 @@ function previewImage(i) {
     {preview?.type === "pdf" && (
       <iframe
         src={`${API}/files/${preview.file}?key=${KEY}`}
-        style={{width:"90%", height:"90%", background:"white", border:"none"}}
+        style={{width:"90%", height:"90%", background:"#111111", border:"none"}}
         onClick={e=>e.stopPropagation()}
       />
     )}
@@ -375,7 +376,7 @@ function previewImage(i) {
   </div>
 )}
 
-
+  </div>
     </div>
   );
 }
